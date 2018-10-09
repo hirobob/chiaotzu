@@ -1,7 +1,7 @@
-// phina.js ‚ğƒOƒ[ƒoƒ‹—Ìˆæ‚É“WŠJ
+// phina.js ã‚’ã‚°ãƒ­ãƒ¼ãƒãƒ«é ˜åŸŸã«å±•é–‹
 phina.globalize();
 
-//ƒAƒZƒbƒg
+//ã‚¢ã‚»ãƒƒãƒˆ
 var ASSETS = {
   image: {
      map: 'https://rawgit.com/shioleap/tomapiko-action/master/assets/map.png',
@@ -23,42 +23,42 @@ var ASSETS = {
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 var CHIAOTZU_TOP = 800;
-var chiaotzu; //ƒ`ƒƒƒIƒY
-var napaNum = 6; // enemy‚Ì”
-var napaNum2 = 5; // enemy‚Ì”
-var napaNum3 = 3; // enemy‚Ì”
-var napaNum4= 1; // enemy‚Ì”
+var chiaotzu; //ãƒãƒ£ã‚ªã‚º
+var napaNum = 6; // enemyã®æ•°
+var napaNum2 = 5; // enemyã®æ•°
+var napaNum3 = 3; // enemyã®æ•°
+var napaNum4= 1; // enemyã®æ•°
 var point = 0;
-var timeLimit = 20; // §ŒÀŠÔ
+var timeLimit = 20; // åˆ¶é™æ™‚é–“
 var time;
 
-// MainScene ƒNƒ‰ƒX‚ğ’è‹`
+// MainScene ã‚¯ãƒ©ã‚¹ã‚’å®šç¾©
 phina.define('MainScene', {
-  // DisplaySceneƒNƒ‰ƒX‚ğŒp³
+  // DisplaySceneã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿
   superClass: 'DisplayScene',
-  // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+  // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   init: function() {
-    // eƒNƒ‰ƒX‰Šú‰»
+    // è¦ªã‚¯ãƒ©ã‚¹åˆæœŸåŒ–
     this.superInit();
     // BGM
     SoundManager.playMusic('bgm');
-    // ”wŒi
+    // èƒŒæ™¯
     Sprite('bg').addChildTo(this).setPosition(this.gridX.center(), this.gridY.center());
-    // ƒ|ƒCƒ“ƒg•\¦ƒ‰ƒxƒ‹
+    // ãƒã‚¤ãƒ³ãƒˆè¡¨ç¤ºãƒ©ãƒ™ãƒ«
     point = 0
     this.label_point = Label({text: '', fontSize: 30, fill: '#FFFFFF',}).addChildTo(this).setPosition(400,25);
-    // c‚èŠÔ•\¦
+    // æ®‹ã‚Šæ™‚é–“è¡¨ç¤º
     time = 0;
     this.label_time = Label({text: '',fontSize: 30,fill: '#FFFFFF',}).addChildTo(this).setPosition(100,25);
-    // ƒ`ƒƒƒIƒY‚ğ’Ç‰Á
+    // ãƒãƒ£ã‚ªã‚ºã‚’è¿½åŠ 
     chiaotzu = Chiaotzu().addChildTo(this);
-    // ƒhƒhƒ“ƒpƒOƒ‹[ƒvì¬
+    // ãƒ‰ãƒ‰ãƒ³ãƒ‘ã‚°ãƒ«ãƒ¼ãƒ—ä½œæˆ
     this.bulletGroup = DisplayElement().addChildTo(this);
-    // “V’Ã”Ñ‚ğ’Ç‰Á
+    // å¤©æ´¥é£¯ã‚’è¿½åŠ 
     this.tenGroup = DisplayElement().addChildTo(this);
     Ten(0,300,8).addChildTo(this.tenGroup);
     Ten(0,500,3).addChildTo(this.tenGroup);
-    // “GƒOƒ‹[ƒv(ƒiƒbƒp)ì¬
+    // æ•µã‚°ãƒ«ãƒ¼ãƒ—(ãƒŠãƒƒãƒ‘)ä½œæˆ
     this.enemyGroup = DisplayElement().addChildTo(this);
     for(let i = 1;i <= napaNum;i++){
        this.generateNapa(100*i,600,'napa',100,-3);
@@ -74,21 +74,21 @@ phina.define('MainScene', {
     }
   },
   
-  // “G¶¬ˆ—
+  // æ•µç”Ÿæˆå‡¦ç†
   generateNapa: function(player_x,player_y,level,point,moveSpeed) {
     Napa(player_x,player_y,level,point,moveSpeed).addChildTo(this.enemyGroup);
   },
   
-  // ƒiƒbƒp‚Æƒr[ƒ€‚Ì“–‚½‚è”»’è
+  // ãƒŠãƒƒãƒ‘ã¨ãƒ“ãƒ¼ãƒ ã®å½“ãŸã‚Šåˆ¤å®š
   hitNapaBullet: function() {
     var self = this;
-    // “G‚ğƒ‹[ƒv
+    // æ•µã‚’ãƒ«ãƒ¼ãƒ—
     this.enemyGroup.children.each(function(enemy) {
       self.bulletGroup.children.each(function(bullet) {
-        // ”»’è—p‚Ì‰~
+        // åˆ¤å®šç”¨ã®å††
         var c1 = Circle(enemy.x,enemy.y,40);
         var c3 = Circle(bullet.x,bullet.y,20); 
-        // ‰~”»’è
+        // å††åˆ¤å®š
         if (Collision.testCircleCircle(c1,c3)) {
           var enemyPoint = enemy.point;
           //SoundManager.play('se1');
@@ -100,14 +100,14 @@ phina.define('MainScene', {
     });
   },
   
-  // “V’Ã”Ñ‚Æƒr[ƒ€‚Ì“–‚½‚è”»’è
+  // å¤©æ´¥é£¯ã¨ãƒ“ãƒ¼ãƒ ã®å½“ãŸã‚Šåˆ¤å®š
   hitTenBullet: function() {
     var self = this;
     this.tenGroup.children.each(function(ten) {
     self.bulletGroup.children.each(function(bullet) {
         var c1 = Circle(ten.x,ten.y,40);
         var c3 = Circle(bullet.x,bullet.y,20);
-               // ‰~”»’è
+               // å††åˆ¤å®š
         if (Collision.testCircleCircle(c1,c3)) {
           //SoundManager.play('bgmTen');
           bullet.remove();
@@ -118,20 +118,20 @@ phina.define('MainScene', {
   });
   },
   
-  //update‚Ìˆ—
+  //updateæ™‚ã®å‡¦ç†
   update: function(app) {
     
-    // timeƒJƒEƒ“ƒg
+    // timeã‚«ã‚¦ãƒ³ãƒˆ
     time += app.deltaTime;
     var timed = Math.floor(time / 1000);
     timeCount = timeLimit - timed;
-    this.label_time.text = 'c‚èŠÔF' + timeCount;
+    this.label_time.text = 'æ®‹ã‚Šæ™‚é–“ï¼š' + timeCount;
     
-    // ƒhƒhƒ“ƒp‚Ì“–‚½‚è”»’è
+    // ãƒ‰ãƒ‰ãƒ³ãƒ‘ã®å½“ãŸã‚Šåˆ¤å®š
     this.hitNapaBullet();
     this.hitTenBullet();
     
-    // ˆÚ“®”»’è
+    // ç§»å‹•åˆ¤å®š
     this.enemyGroup.children.each(function(enemy) {
       //enemy.rotation -= 1;
       if(enemy.level==='napa'){
@@ -151,68 +151,65 @@ phina.define('MainScene', {
     }
     });
     
-    // ƒ|ƒCƒ“ƒgXV
+    // ãƒã‚¤ãƒ³ãƒˆæ›´æ–°
     this.label_point.text = point;
     
     var self = this;
     if(timeCount <= 0){
       if(point > 2500){
-        self.exit('result',{score:point,message:'ƒeƒ“‚³‚ñ‚ğ•‚¯‚Ä‚­‚ê‚Ä‚ ‚è‚ª‚Æ‚¤II'});
+        self.exit('result',{score:point,message:'ãƒ†ãƒ³ã•ã‚“ã‚’åŠ©ã‘ã¦ãã‚Œã¦ã‚ã‚ŠãŒã¨ã†ï¼ï¼'});
       } else if(point > 0){
-        self.exit('result',{score:point,message:'‚Ü‚¾‚Ü‚¾C‹Æ‚ª‚½‚è‚È‚¢‚ÈII'});
+        self.exit('result',{score:point,message:'ã¾ã ã¾ã ä¿®æ¥­ãŒãŸã‚Šãªã„ãªï¼ï¼'});
       } else if(point < 0) {
-        self.exit('result',{score:point,message:'ƒeƒ“‚³‚ñ‚ğE‚µ‚Ä‚ñ‚¶‚á‚Ë‚¦‚æII'});
+        self.exit('result',{score:point,message:'ãƒ†ãƒ³ã•ã‚“ã‚’æ®ºã—ã¦ã‚“ã˜ã‚ƒã­ãˆã‚ˆï¼ï¼'});
       } else  {
-        self.exit('result',{score:point,message:'‚â‚é‹C‚ ‚ñ‚Ì‚©‚æII'});
+        self.exit('result',{score:point,message:'ã‚„ã‚‹æ°—ã‚ã‚“ã®ã‹ã‚ˆï¼ï¼'});
       }
     }
     
   },
   
-  // ƒ^ƒbƒ`”»’è‚ªtrue‚Ì‚Éƒ^ƒbƒ`‚³‚ê‚½‚çÀs‚³‚ê‚éˆ—
+  // ã‚¿ãƒƒãƒåˆ¤å®šãŒtrueã®æ™‚ã«ã‚¿ãƒƒãƒã•ã‚ŒãŸã‚‰å®Ÿè¡Œã•ã‚Œã‚‹å‡¦ç†
   onpointstart: function(e) {
     //SoundManager.play('bgmDodo');
     Bullet().addChildTo(this.bulletGroup).setPosition(chiaotzu.x,chiaotzu.y);
   },
   
-  // ƒ^ƒbƒ`”»’è‚ªtrue‚Ì‚Éƒ^ƒbƒ`‚³‚êI‚í‚Á‚½‚Æ‚«‚ÉÀs‚³‚ê‚éˆ—
+  // ã‚¿ãƒƒãƒåˆ¤å®šãŒtrueã®æ™‚ã«ã‚¿ãƒƒãƒã•ã‚Œçµ‚ã‚ã£ãŸã¨ãã«å®Ÿè¡Œã•ã‚Œã‚‹å‡¦ç†
   onpointend: function() {
   }
   
 });
 
 
-//ƒ`ƒƒƒIƒYƒNƒ‰ƒX‚ğ’è‹`
+//ãƒãƒ£ã‚ªã‚ºã‚¯ãƒ©ã‚¹ã‚’å®šç¾©
 phina.define('Chiaotzu', {
-  //SpriteƒNƒ‰ƒX‚ğŒp³
+  //Spriteã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿
   superClass: 'Sprite',
-  //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+  //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   init: function() {
-    //eƒNƒ‰ƒX‰Šú‰»
+    //è¦ªã‚¯ãƒ©ã‚¹åˆæœŸåŒ–
     this.superInit('chiaotzu', 64, 64);
-    // ƒ^ƒbƒ`‰Â”\‚É‚·‚é
+    // ã‚¿ãƒƒãƒå¯èƒ½ã«ã™ã‚‹
     this.setInteractive(true); 
-    //ˆÊ’u‚ğƒZƒbƒg
+    //ä½ç½®ã‚’ã‚»ãƒƒãƒˆ
     this.setPosition(SCREEN_WIDTH / 6,SCREEN_HEIGHT / 6);
-    //yÀ•W‚ÌŠî€“_‚ğˆê”Ôã‚É
+    //yåº§æ¨™ã®åŸºæº–ç‚¹ã‚’ä¸€ç•ªä¸Šã«
     this.setOrigin(0.5, 0);
-    //¶‰E”½“]
+    //å·¦å³åè»¢
     this.scaleX = -1;
   },
-  
-  //update‚Ìˆ—
+  //updateæ™‚ã®å‡¦ç†
   update: function(app) {
-    
-    //@ˆÚ“®ˆ—
+    //ã€€ç§»å‹•å‡¦ç†
     var p = app.pointer;
     this.x = p.x;
     this.y = p.y;
     
-    // ‰æ–ÊŠO‚Í‚İo‚µ”»’è
+    // ç”»é¢å¤–ã¯ã¿å‡ºã—åˆ¤å®š
     if (this.left < 0) {
       this.left = 0;
       this.physical.velocity.x *= -1;
-      
     }else if (this.right > SCREEN_WIDTH) {
       this.right = SCREEN_WIDTH;
       this.physical.velocity.x *= -1;
@@ -221,103 +218,82 @@ phina.define('Chiaotzu', {
     if (this.top < CHIAOTZU_TOP) {
       this.top = CHIAOTZU_TOP;
       this.physical.velocity.y *= -1;
-      
     }else if (this.bottom > SCREEN_HEIGHT) {
       this.bottom = SCREEN_HEIGHT;
       this.physical.velocity.y *= -1;
     }
-    
   }
-  
   
 });
 
-// ƒ`ƒƒƒIƒYƒr[ƒ€ƒNƒ‰ƒX
+// ãƒãƒ£ã‚ªã‚ºãƒ“ãƒ¼ãƒ ã‚¯ãƒ©ã‚¹
 phina.define('Bullet',{
-  
   superClass: 'Sprite',
   init:function(player_x,player_y){
     this.superInit('chiaotzu_bullet',30,30);
     this.physical.velocity.y = -12;
   },
-  
-  //update‚Ìˆ—
+  //updateæ™‚ã®å‡¦ç†
   update: function(){
     if (this.top < 0) {
       this.remove();
     }
   }
-  
 });
 
-//“V’Ã”ÑƒNƒ‰ƒX‚ğ’è‹`
+//å¤©æ´¥é£¯ã‚¯ãƒ©ã‚¹ã‚’å®šç¾©
 phina.define('Ten', {
-  //SpriteƒNƒ‰ƒX‚ğŒp³
+  //Spriteã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿
   superClass: 'Sprite',
-  //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+  //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
   init: function(setPositionX, setPositionY,moveSpeed) {
-    //eƒNƒ‰ƒX‰Šú‰»
-    this.superInit('ten', 64, 64);
-    //ˆÊ’u‚ğƒZƒbƒg
-    this.setPosition(setPositionX, setPositionY);
-    //yÀ•W‚ÌŠî€“_‚ğˆê”Ôã‚É
-    this.setOrigin(0.5, 0);
-    //¶‰E”½“]
-    this.scaleX = -1;
-    // ˆÚ“®•ûŒü•‚¢ƒXƒs[ƒh
-    this.physical.velocity.x = moveSpeed;
+    this.superInit('ten', 64, 64);//è¦ªã‚¯ãƒ©ã‚¹åˆæœŸåŒ–
+    this.setPosition(setPositionX, setPositionY);//ä½ç½®ã‚’ã‚»ãƒƒãƒˆ
+    this.setOrigin(0.5, 0); //yåº§æ¨™ã®åŸºæº–ç‚¹ã‚’ä¸€ç•ªä¸Šã«
+    this.scaleX = -1;//å·¦å³åè»¢
+    this.physical.velocity.x = moveSpeed; // ç§»å‹•æ–¹å‘ï¼†ã„ã‚¹ãƒ”ãƒ¼ãƒ‰
   },
-  
-  //update‚Ìˆ—
+  //updateæ™‚ã®å‡¦ç†
   update: function(app) {
   }
-  
-  
 });
 
-//ƒiƒbƒpƒNƒ‰ƒX‚ğ’è‹`
+//ãƒŠãƒƒãƒ‘ã‚¯ãƒ©ã‚¹ã‚’å®šç¾©
 phina.define('Napa', {
   
-  //SpriteƒNƒ‰ƒX‚ğŒp³
+  //Spriteã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿
   superClass: 'Sprite',
-      //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+      //ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
       init: function(setPositionX, setPositionY,level,point,moveSpeed) {
-      //eƒNƒ‰ƒX‰Šú‰»
-      this.superInit(level, 90, 90);
-      //ˆÊ’u‚ğƒZƒbƒg(X,Y)
-      this.setPosition(setPositionX, setPositionY);
-      //yÀ•W‚ÌŠî€“_‚ğˆê”Ôã‚É
-      this.setOrigin(0.5, 0);
+      this.superInit(level, 90, 90);//è¦ªã‚¯ãƒ©ã‚¹åˆæœŸåŒ–
+      this.setPosition(setPositionX, setPositionY);//ä½ç½®ã‚’ã‚»ãƒƒãƒˆ(X,Y)
+      this.setOrigin(0.5, 0);//yåº§æ¨™ã®åŸºæº–ç‚¹ã‚’ä¸€ç•ªä¸Šã«
       this.point = point;
       this.physical.velocity.x = moveSpeed;
       this.level = level;
     },
-  
-    //update‚Ìˆ—
+    //updateæ™‚ã®å‡¦ç†
     update: function(app) {
-    
     }
-  
 });
 
-
-// ƒƒCƒ“ˆ—
+// ãƒ¡ã‚¤ãƒ³å‡¦ç†
 phina.main(function() {
   
-  // ƒAƒvƒŠƒP[ƒVƒ‡ƒ“¶¬
+  // ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ç”Ÿæˆ
   var app = GameApp({
-    title: '“V‚³‚ñ€‚È‚È‚¢‚Å',
-    // ƒƒCƒ“ƒV[ƒ“‚©‚çŠJn‚·‚é
+    title: 'å¤©ã•ã‚“æ­»ãªãªã„ã§',
+    // ãƒ¡ã‚¤ãƒ³ã‚·ãƒ¼ãƒ³ã‹ã‚‰é–‹å§‹ã™ã‚‹
     startLabel: location.search.substr(1).toObject().scene || 'title', 
-    width: SCREEN_WIDTH,     // ƒXƒNƒŠ[ƒ“‚Ì‰¡•
-    height: SCREEN_HEIGHT,   // ƒXƒNƒŠ[ƒ“‚Ìc•
-    backgroundColor: '#444', // ƒXƒNƒŠ[ƒ“‚Ì”wŒiF
-    autoPause: true,         // ‰Šúƒ|[ƒY‚ğ‚·‚é‚©
-    debug: false,            // ƒfƒoƒbƒOƒ‚[ƒh‚É‚·‚é‚©
-    fps: 30,                 // 1•bŠÔ‚É‰æ–Ê‚ğXV‚·‚é‰ñ”
-    assets: ASSETS,          //ƒAƒZƒbƒg
+    width: SCREEN_WIDTH,     // ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®æ¨ªå¹…
+    height: SCREEN_HEIGHT,   // ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®ç¸¦å¹…
+    backgroundColor: '#444', // ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã®èƒŒæ™¯è‰²
+    autoPause: true,         // åˆæœŸãƒãƒ¼ã‚ºã‚’ã™ã‚‹ã‹
+    debug: false,            // ãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰ã«ã™ã‚‹ã‹
+    fps: 30,                 // 1ç§’é–“ã«ç”»é¢ã‚’æ›´æ–°ã™ã‚‹å›æ•°
+    assets: ASSETS,          //ã‚¢ã‚»ãƒƒãƒˆ
   });
   
-  // ƒAƒvƒŠƒP[ƒVƒ‡ƒ“Às
+  // ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³å®Ÿè¡Œ
   app.run();
 });
