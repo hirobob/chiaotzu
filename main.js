@@ -14,9 +14,8 @@ var ASSETS = {
      chiaotzu_bullet:' https://i.imgur.com/KvisS15.png',
      bg: 'https://i.imgur.com/8ioMgMn.png'
   },
-  sound: {
+   sound: {
     'bgm': 'https://rawgit.com/alkn203/phina_js_tips/master/assets/sounds/bgm_maoudamashii_8bit25.mp3',
-    'bgmDodo': 'https://rawgit.com/alkn203/phina_js_tips/master/assets/sounds/se_maoudamashii_chime14.mp3',
   },
 };
 
@@ -156,8 +155,14 @@ phina.define('MainScene', {
     
     var self = this;
     if(timeCount <= 0){
-      if(point > 2500){
+      if(point > 3000){
         self.exit('result',{score:point,message:'テンさんを助けてくれてありがとう！！'});
+      } else if(point <= 3000){
+        self.exit('result',{score:point,message:'あと少しだ！！がんばれチョアズ！！'});
+      } else if(point <= 2000){
+        self.exit('result',{score:point,message:'サイバイマン以下だな！！'});
+      } else if(point <= 1000){
+        self.exit('result',{score:point,message:'ラディッツ以下だな！！'});
       } else if(point > 0){
         self.exit('result',{score:point,message:'まだまだ修業がたりないな！！'});
       } else if(point < 0) {
@@ -291,7 +296,7 @@ phina.main(function() {
     autoPause: true,         // 初期ポーズをするか
     debug: false,            // デバッグモードにするか
     fps: 30,                 // 1秒間に画面を更新する回数
-    assets: ASSETS,          //アセット
+    assets: ASSETS         //アセット
   });
   
   // アプリケーション実行
